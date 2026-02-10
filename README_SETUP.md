@@ -18,7 +18,7 @@ This folder contains a Dockerized Interactive Brokers (IB) Gateway, optimized fo
    Paste the following content (update passwords as needed):
    ```bash
    TWS_USERID=kovacsikbot
-   TWS_PASSWORD=R-Ny(TVu7*n?X*Abot
+   TWS_PASSWORD=asdasd
    VNC_SERVER_PASSWORD=secret123
    TIME_ZONE=Europe/Budapest
    TRADING_MODE=live
