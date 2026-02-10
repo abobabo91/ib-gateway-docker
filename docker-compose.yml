@@ -45,12 +45,13 @@ services:
       START_SCRIPTS: ${START_SCRIPTS:-}
       X_SCRIPTS: ${X_SCRIPTS:-}
       IBC_SCRIPTS: ${IBC_SCRIPTS:-}
-    #    volumes:
-    #      - ${PWD}/jts.ini:/home/ibgateway/Jts/jts.ini
-    #      - ${PWD}/config.ini:/home/ibgateway/ibc/config.ini
-    #      - ${PWD}/tws_settings/:${TWS_SETTINGS_PATH:-/home/ibgateway/Jts}
-    #      - ${PWD}/ssh/:/home/ibgateway/.ssh
-    #      - ${PWD}/scripts:/home/ibgateway/init-scripts
+    volumes:
+      - ./jts.ini:/home/ibgateway/Jts/jts.ini
+      - ./config.ini:/home/ibgateway/ibc/config.ini
+      - ./tws_settings/:${TWS_SETTINGS_PATH:-/home/ibgateway/Jts}
+      - ./ssh/:/home/ibgateway/.ssh
+      - ./scripts:/home/ibgateway/init-scripts
+      - ./logs:/home/ibgateway/Jts/logs
     ports:
       - "127.0.0.1:4001:4003"
       - "127.0.0.1:4002:4004"

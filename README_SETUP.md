@@ -2,6 +2,23 @@
 
 This folder contains a Dockerized Interactive Brokers (IB) Gateway, optimized for automated trading bots. It includes a built-in virtual desktop for GUI access and robust 2FA handling.
 
+## 📁 Volume Management (Important)
+
+This setup uses persistent volumes to ensure that your logs, settings, and session data are preserved across container restarts. This is critical for reducing the number of 2FA requests and for debugging.
+
+### Persistence Overview
+- **`./logs`**: Contains IB Gateway and IBC log files.
+- **`./tws_settings`**: Stores your TWS/Gateway configuration.
+- **`./jts.ini`**: The main IBKR initialization file.
+- **`./config.ini`**: The IBC configuration file.
+
+### Accessing Logs
+To view the logs of a running or killed process:
+1.  Check the `./logs` directory on your host machine.
+2.  Use `tail -f logs/FILENAME.log` to watch the logs in real-time.
+
+---
+
 ## 🚀 Quick Start (Server Deployment)
 
 1. **Pull the Code:**
@@ -22,8 +39,9 @@ This folder contains a Dockerized Interactive Brokers (IB) Gateway, optimized fo
    VNC_SERVER_PASSWORD=secret123
    TIME_ZONE=Europe/Budapest
    TRADING_MODE=live
-   TWOFA_TIMEOUT=180
+   TWOFA_TIMEOUT=1800
    TWOFA_TIMEOUT_ACTION=restart
+   TWOFA_EXIT_INTERVAL=60
    TWS_ACCEPT_INCOMING=accept
    EXISTING_SESSION_DETECTED_ACTION=primary
    BYPASS_WARNING=yes
@@ -64,14 +82,15 @@ For security, the GUI is restricted to `localhost`. To access it from your compu
 ---
 
 ## 🛠️ Useful Commands
-*   **View Logs:** `docker compose logs -f` (Crucial for seeing 2FA requests)
+*   **View Logs:** `docker compose logs -f` (or check the `./logs` folder)
 *   **Restart:** `docker compose restart`
-*   **Stop:** `docker compose down`
+*   **Stop:** `docker compose stop` (keeps container state)
+*   **Remove:** `docker compose down` (safe to use with volumes)
 
 ---
 
 ## 🛡️ 2FA & Stability
-*   **2FA Window:** You have **3 minutes (180s)** to approve the 2FA notification on your phone.
-*   **Auto-Recovery:** If 2FA fails or times out, the container will automatically restart and try again.
+*   **2FA Window:** You have **30 minutes (1800s)** to approve the 2FA notification on your phone.
+*   **Auto-Recovery:** If 2FA fails or times out, the container will restart and try again.
 *   **Daily Restart:** Scheduled for **11:59 PM** to maintain connection health.
-*   **Frequency:** You should only need to 2FA when the container first starts or during weekly IBKR maintenance (usually Sundays).
+*   **Frequency:** With volumes enabled, you should only need to 2FA when the container first starts or during weekly IBKR maintenance.
